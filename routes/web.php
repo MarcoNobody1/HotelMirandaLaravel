@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutusController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\RoomController;
@@ -28,6 +29,8 @@ Route::get('/contact', [ContactController::class, 'create']);
 Route::post('/contact', [ContactController::class, 'store']);
 
 Route::get('/roomdetails/{id}', [RoomController::class, 'show']);
+
+Route::post('/roomdetails/{id}', [BookingController::class, 'store']);
 
 Route::get('/rooms', [RoomController::class, 'index']);
 
