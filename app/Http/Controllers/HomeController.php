@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -12,6 +13,11 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+        if (Session::has('roomId') && Session::has('roomPrice')) {
+            Session::forget(['roomId', 'roomPrice']);
+        }
+
         $rooms = Room::select('room.*')
             ->selectRaw('GROUP_CONCAT(DISTINCT photos.photo_url) as photo')
             ->selectRaw('GROUP_CONCAT(amenity.amenity) as amenity')
