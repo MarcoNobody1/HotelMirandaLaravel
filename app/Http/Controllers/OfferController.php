@@ -15,6 +15,9 @@ class OfferController extends Controller
      */
     public function index()
     {
+        $checkin = null;
+        $checkout = null;
+
         if (Session::has('arrival') && Session::has('departure')) {
             $checkin = htmlspecialchars(Session::get('arrival'));
             $checkout = htmlspecialchars(Session::get('departure'));
@@ -66,7 +69,7 @@ class OfferController extends Controller
 
 
 
-        return view('offers', ['discountedRooms' => $chunks, 'rooms' => $randomRooms]);
+        return view('offers', ['discountedRooms' => $chunks, 'rooms' => $randomRooms, 'checkin' => $checkin, 'checkout' => $checkout]);
     }
 
     /**
@@ -82,7 +85,23 @@ class OfferController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $checkin = htmlspecialchars($request->query('arrival'));
+        $checkout = htmlspecialchars($request->query('departure'));
+        Session::put('arrival', $checkin);
+        Session::put('departure', $checkout);
+        $roominstance = new Room();
+        $rooms = $roominstance->getOffers($checkin, $checkout);
+        $roomsArray = $rooms->toArray();
+
+        foreach ($roomsArray as &$room) {
+            $room['discountedPrice'] = $room['price'] - ($room['price'] * ($room['discount'] / 100));
+        }
+
+        $randomRoomIndices = array_rand($roomsArray, 5);
+        $randomRooms = array_intersect_key($roomsArray, array_flip($randomRoomIndices));
+        $chunks = array_chunk($roomsArray, 5);
+
+        return view('offers', ['discountedRooms' => $chunks, 'rooms' => $randomRooms, 'checkin' => $checkin, 'checkout' => $checkout]);
     }
 
     /**
