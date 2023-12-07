@@ -37,3 +37,5 @@ Route::get('/rooms', [RoomController::class, 'index']);
 Route::get('/rooms-search', [RoomController::class, 'store']);
 
 Route::get('/offers', [OfferController::class, 'index']);
+
+Route::get('/offers-search', [OfferController::class, 'store']);
