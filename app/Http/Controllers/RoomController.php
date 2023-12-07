@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class RoomController extends Controller
@@ -27,17 +28,17 @@ class RoomController extends Controller
             ->leftJoin('room_amenities', 'room.id', '=', 'room_amenities.room_id')
             ->leftJoin('amenity', 'room_amenities.amenity_id', '=', 'amenity.id')
             ->where('room.availability', 'Available')
-                ->whereNotExists(function (Builder $subquery) use ($checkin, $checkout) {
-                    $subquery->selectRaw(1)
-                        ->from('booking as b')
-                        ->whereColumn('room.id', 'b.room_id')
-                        ->where(function (Builder $query) use ($checkin, $checkout) {
-                            $query->whereBetween($checkin, ['b.check_in', 'b.check_out'])
-                                ->orWhereBetween($checkout, ['b.check_in', 'b.check_out'])
-                                ->orWhereBetween('b.check_in', [$checkin, $checkout])
-                                ->orWhereBetween('b.check_out', [$checkin, $checkout]);
-                        });
-                })
+            ->whereNotExists(function (Builder $subquery) use ($checkin, $checkout) {
+                $subquery->selectRaw(1)
+                    ->from('booking')
+                    ->whereColumn('room.id', 'booking.room_id')
+                    ->where(function (Builder $query) use ($checkin, $checkout) {
+                        $query->whereBetween(DB::raw("'$checkin'"), ['booking.check_in', 'booking.check_out'])
+                            ->orWhereBetween(DB::raw("'$checkout'"), ['booking.check_in', 'booking.check_out'])
+                            ->orWhereBetween('booking.check_in', [DB::raw("'$checkin'"), DB::raw("'$checkout'")])
+                            ->orWhereBetween('booking.check_out', [DB::raw("'$checkin'"), DB::raw("'$checkout'")]);
+                    });
+            })
                 ->groupBy('room.id')
                 ->get();
         } else {
