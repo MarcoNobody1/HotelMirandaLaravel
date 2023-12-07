@@ -14,6 +14,7 @@ Hotel Miranda | Rooms
         </div>
     </div>
 </section>
+@if (($checkin) && ($checkout))
 <section class="roomshow">
     <div class="roomshow__inner">
         <div class="swiper roomshow__swiper">
@@ -47,6 +48,17 @@ Hotel Miranda | Rooms
         </div>
     </div>
 </section>
+@else
+<p class='disclaimer'>You must select a date range !</p>
+<form name="dates-form" class="intro__form" id="checkavailability_form" action="/rooms-search" method="GET">
+    <label for="arrival" class="intro__form-arrivallbl">Arrival Date</label>
+    <input name="arrival" type="date" value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" id="arrival" class="intro__form-arrivalinp">
+    <label for="departure" class="intro__form-departurelbl">Departure Date</label>
+    <input name="departure" type="date" value="{{date('Y-m-d', strtotime('+1 day'))}}" min="{{date('Y-m-d', strtotime('+1 day'))}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" id="departure" class="intro__form-departureinp">
+    <br>
+    <button name="availability-btn" type="submit" class="intro__form-btn">CHECK AVAILABILITY</button>
+</form>
+@endif
 @endsection
 @section('scripts')
 <script src="/scripts/Rooms.js"></script>
