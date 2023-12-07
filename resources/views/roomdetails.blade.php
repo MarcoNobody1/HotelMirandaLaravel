@@ -29,6 +29,7 @@ Hotel Miranda | Room Details
             <img class="roomsdetails__photo" src="{{ $roomdetails['photo'] }}" alt="Room photo">
         </div>
         <form class="roomsdetails__form" id="roomsdetails__form" method="POST">
+            @csrf
             <p class="roomsdetails__form--title">Check Availability</p>
             <label for="checkin" class="roomsdetails__form--checkinlabel">Check In</label>
             <input type="date" id="checkin" name="checkin" value="{{ $checkin }}" class="roomsdetails__form--inputcheckin" disabled>
