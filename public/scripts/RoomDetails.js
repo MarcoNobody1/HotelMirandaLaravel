@@ -86,7 +86,7 @@ const notification = (
   }).then((result) => {
     if (result.isConfirmed) {
       location.reload();
-      window.location.href = "index";
+      window.location.href = "/";
     }
   });
 };
@@ -136,7 +136,6 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         })
         .catch((error) => {
-          console.log(error);
           notification(
             "Oops! Something went wrong. Try again later, please.",
             "error"
