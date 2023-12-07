@@ -32,18 +32,19 @@ class ContactController extends Controller
         ]);
 
         $currentDateTime = now();
-        $contact = new Contact();
-        $contact->date = $currentDateTime;
-        $contact->name = htmlspecialchars($request->input('name'));
-        $contact->email = htmlspecialchars($request->input('email'));
-        $contact->phone = htmlspecialchars($request->input('phone'));
-        $contact->subject = htmlspecialchars($request->input('subject'));
-        $contact->comment = htmlspecialchars($request->input('message'));
-        $contact->archived = false;
 
-        $contact->save();
+        $contact = Contact::create([
+            'date' =>  $currentDateTime,
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'subject' => $request->input('subject'),
+            'comment' => $request->input('message'),
+            'archived' => false,
+        ]);
 
         if ($contact->wasRecentlyCreated) {
+
             $notification = [
                 'Thanks! Your message will be reviewed soon.',
                 'success',
