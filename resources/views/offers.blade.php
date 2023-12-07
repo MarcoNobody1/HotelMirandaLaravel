@@ -83,7 +83,7 @@ Hotel Miranda | Offers
                                     </div>
                                 </div>
                             </div>
-                            <a href="roomdetails?id={{ $room['id'] }}" class="roomoffer__btn">BOOK NOW</a>
+                            <a href="roomdetails/{{ $room['id'] }}" class="roomoffer__btn">BOOK NOW</a>
                         </div>
                     </div>
                     @endforeach
@@ -118,7 +118,7 @@ Hotel Miranda | Offers
                                 <h3 class="popularlist__room-title">{{ $room['type'] }}</h3>
                                 <p class="popularlist__content">{{ $room['description'] }}</p>
                                 <span class="popularlist__price">${{ $room['discountedPrice'] }}/Night</span>
-                                <a href="roomdetails?id={{ $room['id'] }}" class="popularlist__booknow">Book Now</a>
+                                <a href="roomdetails/{{ $room['id'] }}" class="popularlist__booknow">Book Now</a>
                             </div>
                         </div>
                     </div>
