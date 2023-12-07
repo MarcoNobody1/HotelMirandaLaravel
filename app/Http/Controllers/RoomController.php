@@ -88,6 +88,12 @@ class RoomController extends Controller
 
         $roomDetails = $roomraw->toArray();
 
+        $roomId = $roomDetails['id'];
+        $roomPrice = $roomDetails['price'];
+
+        Session::put('roomId', $roomId);
+        Session::put('roomPrice', $roomPrice);
+
         $roomDetails['finalPrice'] = $roomDetails['price'] - ($roomDetails['price'] * ($roomDetails['discount'] / 100));
 
         $roomsraw = Room::select('room.*')
