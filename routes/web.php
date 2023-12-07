@@ -20,11 +20,17 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [HomeController::class, 'index']);
-     
+
 Route::get('/aboutus', [AboutusController::class, 'index']);
 
 Route::get('/contact', [ContactController::class, 'create']);
 
+Route::post('/contact', [ContactController::class, 'store']);
+
+Route::get('/roomdetails/{id}', [RoomController::class, 'show']);
+
 Route::get('/rooms', [RoomController::class, 'index']);
+
+Route::get('/rooms-search', [RoomController::class, 'store']);
 
 Route::get('/offers', [OfferController::class, 'index']);
