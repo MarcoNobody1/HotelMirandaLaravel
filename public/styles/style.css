@@ -2455,7 +2455,8 @@ ul {
   width: 335px;
   height: 218px;
   margin: 0 auto;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .roomshow__price {
   color: #bead8e;
@@ -2572,7 +2573,8 @@ ul {
   max-width: 335px;
   max-height: 160px;
   width: 100%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .roomoffer__imgwrapper-newprice-night {
   color: #de5777;
@@ -3470,6 +3472,17 @@ body {
 
 .header-bg-rectangle {
   display: none;
+}
+
+.disclaimer {
+  width: 100%;
+  text-align: center;
+  font-family: Archivo;
+  font-size: 0.813rem;
+  font-weight: 700;
+  letter-spacing: 2.8px;
+  color: #222;
+  margin-bottom: 16px;
 }
 
 @media only screen and (min-width: 1000px) {
