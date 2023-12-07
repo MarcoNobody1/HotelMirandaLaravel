@@ -15,11 +15,9 @@ class OfferController extends Controller
      */
     public function index()
     {
-        if (request()->has('arrival') && request()->has('departure')) {
-            $checkin = htmlspecialchars(request()->input('arrival'));
-            Session::put('arrival', $checkin);
-            $checkout = htmlspecialchars(request()->input('departure'));
-            Session::put('departure', $checkout);
+        if (Session::has('arrival') && Session::has('departure')) {
+            $checkin = htmlspecialchars(Session::get('arrival'));
+            $checkout = htmlspecialchars(Session::get('departure'));
 
             $rooms = Room::select('room.*')
                 ->selectRaw('GROUP_CONCAT(DISTINCT photos.photo_url) as photo')
