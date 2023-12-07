@@ -45,6 +45,7 @@ Hotel Miranda | Contact
 <section class="contactform">
     <div class="contactform__inner">
         <form class="contactform__form" method="POST" id="contact_form">
+            @csrf
             <div class="contactform__firstrow">
                 <div class="contactform__inputwrapper --space">
                     <input autocomplete="true" placeholder="Your full name" type="text" name="name" id="name">
