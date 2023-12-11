@@ -13,25 +13,34 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $checkin = null;
-        $checkout = null;
+        $checkin = '';
+        $checkout = '';
 
-        if (Session::has('arrival') && Session::has('departure')) {
-            $checkin =  htmlspecialchars(Session::get('arrival'));
-            $checkout =  htmlspecialchars(Session::get('departure'));
-            $roominstance = new Room();
-            $rooms = $roominstance->getRooms($checkin, $checkout);
-        } else {
-            $rooms = Room::select('room.*')
-                ->selectRaw('GROUP_CONCAT(DISTINCT photos.photo_url) as photo')
-                ->selectRaw('GROUP_CONCAT(amenity.amenity) as amenity')
-                ->leftJoin('photos', 'room.id', '=', 'photos.room_id')
-                ->leftJoin('room_amenities', 'room.id', '=', 'room_amenities.room_id')
-                ->leftJoin('amenity', 'room_amenities.amenity_id', '=', 'amenity.id')
-                ->where('room.availability', 'Available')
-                ->groupBy('room.id')
-                ->get();
+        // if (Session::has('arrival') && Session::has('departure')) {
+        //     $checkin =  htmlspecialchars(Session::get('arrival'));
+        //     $checkout =  htmlspecialchars(Session::get('departure'));
+        //     $roominstance = new Room();
+        //     $rooms = $roominstance->getRooms($checkin, $checkout);
+        // } else {
+        //     $rooms = Room::select('room.*')
+        //         ->selectRaw('GROUP_CONCAT(DISTINCT photos.photo_url) as photo')
+        //         ->selectRaw('GROUP_CONCAT(amenity.amenity) as amenity')
+        //         ->leftJoin('photos', 'room.id', '=', 'photos.room_id')
+        //         ->leftJoin('room_amenities', 'room.id', '=', 'room_amenities.room_id')
+        //         ->leftJoin('amenity', 'room_amenities.amenity_id', '=', 'amenity.id')
+        //         ->where('room.availability', 'Available')
+        //         ->groupBy('room.id')
+        //         ->get();
+        // }
+
+        $rooms = Room::all();
+
+        foreach ($rooms as $room) {
+            foreach ($room->getPhotos as $photo) {
+                $photourl = $photo;
+            }
         }
+
         $roomsArray = $rooms->toArray();
 
         foreach ($roomsArray as &$room) {
@@ -40,7 +49,7 @@ class RoomController extends Controller
 
         $chunks = array_chunk($roomsArray, 5);
 
-        return view('rooms', ['rooms' => $chunks, 'checkin' => $checkin, 'checkout' => $checkout]);
+        return view('rooms', ['rooms' => $chunks, 'checkin' => $checkin, 'checkout' => $checkout, 'photo' => $photourl]);
     }
 
 
