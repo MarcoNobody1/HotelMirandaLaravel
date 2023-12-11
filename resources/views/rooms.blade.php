@@ -14,7 +14,6 @@ Hotel Miranda | Rooms
         </div>
     </div>
 </section>
-@if (($checkin) && ($checkout))
 <section class="roomshow">
     <div class="roomshow__inner">
         <div class="swiper roomshow__swiper">
@@ -23,7 +22,7 @@ Hotel Miranda | Rooms
                 <div class="swiper-slide roomshow__swiper-slide">
                     @foreach($chunk as $room)
                     <div class="roomshow__roomwrapper">
-                        <img class="roomshow__photo" src="{{ $room['photo'] }}" alt="Hotel Room">
+                        <img class="roomshow__photo" src="{{ $photo }}" alt="Hotel Room">
                         <div class="roomshow__icons">
                             <img src="/assets/Rooms__desc Icons/icon 1.svg" alt="" class="">
                             <img src="/assets/Rooms__desc Icons/icon 2.svg" alt="" class="">
@@ -37,7 +36,12 @@ Hotel Miranda | Rooms
                             <h3 class="roomshow__title">{{ $room['type'] }}</h3>
                             <p class="roomshow__content">{{ $room['description'] }}</p>
                             <span class="roomshow__price">${{ $room['discountedPrice'] }}/Night</span>
+                            @if($checkin != '' && $checkout != '')
+                            <a href="roomdetails/{{ $room['id'] }}?arrival={{$checkin}}&departure={{$checkout}}" class="roomshow__booknow">Book Now</a>
+                            @else
                             <a href="roomdetails/{{ $room['id'] }}" class="roomshow__booknow">Book Now</a>
+                            @endif
+
                         </div>
                     </div>
                     @endforeach
@@ -48,17 +52,6 @@ Hotel Miranda | Rooms
         </div>
     </div>
 </section>
-@else
-<p class='disclaimer'>You must select a date range !</p>
-<form name="dates-form" class="intro__form" id="checkavailability_form" action="/rooms-search" method="GET">
-    <label for="arrival" class="intro__form-arrivallbl">Arrival Date</label>
-    <input name="arrival" type="date" value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" id="arrival" class="intro__form-arrivalinp">
-    <label for="departure" class="intro__form-departurelbl">Departure Date</label>
-    <input name="departure" type="date" value="{{date('Y-m-d', strtotime('+1 day'))}}" min="{{date('Y-m-d', strtotime('+1 day'))}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" id="departure" class="intro__form-departureinp">
-    <br>
-    <button name="availability-btn" type="submit" class="intro__form-btn">CHECK AVAILABILITY</button>
-</form>
-@endif
 @endsection
 @section('scripts')
 <script src="/scripts/Rooms.js"></script>
