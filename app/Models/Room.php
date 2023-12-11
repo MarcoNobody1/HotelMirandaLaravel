@@ -4,14 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
+use App\Models\RoomPhoto;
+use App\Models\Amenity;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Room extends Model
 {
     use HasFactory;
     protected $table = 'room';
-    public $timestamps = false;
+
+    public function getPhotos(): HasMany
+    {
+        return $this->hasMany(RoomPhoto::class);
+    }
+
+    public function amenities(): BelongsToMany
+    {
+        return $this->belongsToMany(Amenity::class, 'room_amenities');
+    }
 
     public function getRooms($checkin, $checkout)
     {
