@@ -72,7 +72,9 @@ Hotel Miranda | Home
             <div class="swiper-wrapper">
                 @foreach($rooms as $room)
                 <div alt="Hotel Room nº1" src="/assets/Rooms_swiper/room 1.jpg" class="swiper-slide sliderooms">
-                    <img alt="Hotel Room nº1" src="{{ $room['photo'] }}">
+                    @foreach($room->getPhotos as $photo)
+                    <img alt="Hotel Room nº1" src="{{ $photo->photo_url }}">
+                    @endforeach
                     <div class="rooms__desc">
                         <h3 class="rooms__desc-title">{{ $room['type'] }}</h3>
                         <p class="rooms__desc-content">{{ $room['description'] }}</p>
