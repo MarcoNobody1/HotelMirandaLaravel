@@ -12,10 +12,10 @@ Hotel Miranda | Home
     </div>
 
     <form name="dates-form" class="intro__form" id="checkavailability_form" action="/rooms-search" method="GET">
-        <label for="arrival" class="intro__form-arrivallbl">Arrival Date</label>
-        <input name="arrival" type="date" value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" id="arrival" class="intro__form-arrivalinp">
-        <label for="departure" class="intro__form-departurelbl">Departure Date</label>
-        <input name="departure" type="date" value="{{date('Y-m-d', strtotime('+1 day'))}}" min="{{date('Y-m-d', strtotime('+1 day'))}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" id="departure" class="intro__form-departureinp">
+        <label for="check_in" class="intro__form-arrivallbl">Arrival Date</label>
+        <input name="check_in" type="date" value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" id="check_in" class="intro__form-arrivalinp">
+        <label for="check_out" class="intro__form-departurelbl">Departure Date</label>
+        <input name="check_out" type="date" value="{{date('Y-m-d', strtotime('+1 day'))}}" min="{{date('Y-m-d', strtotime('+1 day'))}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" id="check_out" class="intro__form-departureinp">
         <br>
         <button type="submit" class="intro__form-btn">CHECK AVAILABILITY</button>
 
