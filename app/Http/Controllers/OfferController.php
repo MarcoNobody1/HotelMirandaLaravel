@@ -15,46 +15,12 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $checkin = null;
-        $checkout = null;
+        $checkin = '';
+        $checkout = '';
 
-        if (Session::has('arrival') && Session::has('departure')) {
-            $checkin = htmlspecialchars(Session::get('arrival'));
-            $checkout = htmlspecialchars(Session::get('departure'));
+        $rooms = Room::where('room.discount', '!=', "0")->get();
 
-            $rooms = Room::select('room.*')
-                ->selectRaw('GROUP_CONCAT(DISTINCT photos.photo_url) as photo')
-                ->selectRaw('GROUP_CONCAT(amenity.amenity) as amenity')
-                ->leftJoin('photos', 'room.id', '=', 'photos.room_id')
-                ->leftJoin('room_amenities', 'room.id', '=', 'room_amenities.room_id')
-                ->leftJoin('amenity', 'room_amenities.amenity_id', '=', 'amenity.id')
-                ->where('room.availability', 'Available')
-                ->where('room.discount', '!=', 0)
-                ->whereNotExists(function (Builder $subquery) use ($checkin, $checkout) {
-                    $subquery->selectRaw(1)
-                        ->from('booking')
-                        ->whereColumn('room.id', 'booking.room_id')
-                        ->where(function (Builder $query) use ($checkin, $checkout) {
-                            $query->whereBetween(DB::raw("'$checkin'"), ['booking.check_in', 'booking.check_out'])
-                                ->orWhereBetween(DB::raw("'$checkout'"), ['booking.check_in', 'booking.check_out'])
-                                ->orWhereBetween('booking.check_in', [DB::raw("'$checkin'"), DB::raw("'$checkout'")])
-                                ->orWhereBetween('booking.check_out', [DB::raw("'$checkin'"), DB::raw("'$checkout'")]);
-                        });
-                })
-                ->groupBy('room.id')
-                ->get();
-        } else {
-            $rooms = Room::select('room.*')
-                ->selectRaw('GROUP_CONCAT(DISTINCT photos.photo_url) as photo')
-                ->selectRaw('GROUP_CONCAT(amenity.amenity) as amenity')
-                ->leftJoin('photos', 'room.id', '=', 'photos.room_id')
-                ->leftJoin('room_amenities', 'room.id', '=', 'room_amenities.room_id')
-                ->leftJoin('amenity', 'room_amenities.amenity_id', '=', 'amenity.id')
-                ->where('room.availability', 'Available')
-                ->where('room.discount', '!=', 0)
-                ->groupBy('room.id')
-                ->get();
-        }
+        $offerPhotoArray = Room::organizePhotos($rooms);
 
         $roomsArray = $rooms->toArray();
 
@@ -62,14 +28,22 @@ class OfferController extends Controller
             $room['discountedPrice'] = $room['price'] - ($room['price'] * ($room['discount'] / 100));
         }
 
-        $randomRoomIndices = array_rand($roomsArray, 5);
-        $randomRooms = array_intersect_key($roomsArray, array_flip($randomRoomIndices));
+        $chunks = array_chunk($roomsArray, 5);
 
-        $chunks = array_chunk($roomsArray, 3);
+        if ($checkin && $checkout) {
+            $recommendedRooms = Room::getRooms($checkin, $checkout)->shuffle()->take(5);
+            $recommendedPhotoArray = Room::organizePhotos($recommendedRooms);
+        } else {
+            $recommendedRooms = Room::all()->shuffle()->take(5);
+            $recommendedPhotoArray = Room::organizePhotos($recommendedRooms);
+        }
+        
 
+        foreach ($recommendedRooms as &$room) {
+            $room['discountedPrice'] = $room['price'] - ($room['price'] * ($room['discount'] / 100));
+        }
 
-
-        return view('offers', ['discountedRooms' => $chunks, 'rooms' => $randomRooms, 'checkin' => $checkin, 'checkout' => $checkout]);
+        return view('offers', ['discountedRooms' => $chunks, 'rooms' => $recommendedRooms, 'checkin' => $checkin, 'checkout' => $checkout, 'offerphoto' =>  $offerPhotoArray, 'recommendedphoto' => $recommendedPhotoArray]);
     }
 
     /**
