@@ -19,24 +19,27 @@ Hotel Miranda | Room Details
         <div class="roomsdetails__data">
             <div class="roomsdetails__specs">
                 <div class="roomsdetails__specs--titlegroup">
-                    <h6 class="roomsdetails__specs--pretitle">Room {{ $roomdetails['number'] }}</h6>
-                    <p class="roomsdetails__specs--title">{{ $roomdetails['type'] }}</p>
+                    <h6 class="roomsdetails__specs--pretitle">Room {{ $roomdetails->number }}</h6>
+                    <p class="roomsdetails__specs--title">{{ $roomdetails->type }}</p>
                 </div>
                 <div class="roomsdetails__specs--pricedetails">
-                    <span class="roomsdetails__specs--price">${{ $roomdetails['finalPrice'] }}</span>
+                    <span class="roomsdetails__specs--price">${{ $roomdetails->finalPrice }}</span>
                 </div>
             </div>
-            <img class="roomsdetails__photo" src="{{ $roomdetails['photo'] }}" alt="Room photo">
+            @foreach($roomdetails->getPhotos as $photo)
+            <img class="roomsdetails__photo" src="{{ $photo->photo_url }}" alt="{{$roomdetails->type}}">
+            @endforeach
         </div>
-        <form class="roomsdetails__form" id="roomsdetails__form" method="POST">
+        <form class="roomsdetails__form" id="roomsdetails__form" method="{{$checkin && $checkout ? 'POST' : 'GET'}}">
             @csrf
             <p class="roomsdetails__form--title">Check Availability</p>
             <label for="checkin" class="roomsdetails__form--checkinlabel">Check In</label>
-            <input type="date" id="checkin" name="checkin" value="{{ $checkin }}" class="roomsdetails__form--inputcheckin" disabled>
+            <input type="date" id="checkin" name="check_in" value="{{ $checkin }}" class="roomsdetails__form--inputcheckin" readonly>
             <label for="checkout" class="roomsdetails__form--checkoutlabel">Check Out</label>
-            <input type="date" id="checkout" name="checkout" value="{{ $checkout }}" class="roomsdetails__form--inputcheckout" disabled>
-            <label for="name" class="roomsdetails__form--namelabel">Name</label>
-            <input placeholder="Enter your name" type="text" id="firstname" name="firstname" class="roomsdetails__form--inputname">
+            <input type="date" id="checkout" name="check_out" value="{{ $checkout }}" class="roomsdetails__form--inputcheckout" readonly>
+            @if ($checkin && $checkout)
+            <label for="firstname" class="roomsdetails__form--namelabel">Name</label>
+            <input placeholder="Enter your name" type="text" id="firstname" name="name" class="roomsdetails__form--inputname">
             <label for="surname" class="roomsdetails__form--surnamelabel">Surname</label>
             <input placeholder="Enter your surname" type="text" id="surname" name="surname" class="roomsdetails__form--inputsurname">
             <label for="availemail" class="roomsdetails__form--emaillabel">Email</label>
@@ -44,11 +47,19 @@ Hotel Miranda | Room Details
             <label for="availphone" class="roomsdetails__form--phonelabel">Phone</label>
             <input placeholder="Enter your phone number" autocomplete="on" type="tel" id="availphone" name="phone" class="roomsdetails__form--inputphone">
             <label for="specialrequest" class="roomsdetails__form--specialrequestlabel">Message</label>
-            <textarea placeholder="Tell us what you need" name="specialrequest" id="specialrequest" cols="30" rows="10" class="roomsdetails__form--inputspecialrequest"></textarea>
+            <textarea style="resize: none;" placeholder="Tell us what you need" name="special_request" id="specialrequest" cols="30" rows="10" class="roomsdetails__form--inputspecialrequest"></textarea>
+            <input type="hidden" name="price" value="{{$roomPrice}}">
+            <input type="hidden" name="room_id" value="{{$roomId}}">
+            <input type="hidden" name="order_date" value="{{now()}}">
+            <input type="hidden" name="status" value="Check In">
             <button type="submit" class="roomsdetails__form--button">Book Now</button>
+            @else
+            <button type="submit" class="roomsdetails__form--button">Check Availability</button>
+            @endif
+           
         </form>
     </div>
-    <p class="roomsdetails__description">{{ $roomdetails['description'] }}</p>
+    <p class="roomsdetails__description">{{ $roomdetails->description }}</p>
 </section>
 <section class="roomsamenities">
     <h4 class="roomsamenities__title">Amenities</h4>
@@ -145,7 +156,9 @@ Hotel Miranda | Room Details
             <div class="swiper-slide roomsrelated__cardslide">
                 <div class="roomsrelated__card">
                     <div class="roomsrelated__roomwrapper">
-                        <img class="roomsrelated__photo" src="{{ $room['photo'] }}" alt="Hotel Room">
+                    @foreach($room->getPhotos as $photo)
+                        <img class="roomsrelated__photo" src="{{ $photo->photo_url }}" alt="Hotel Room">
+                        @endforeach
                         <div class="roomsrelated__icons">
                             <img src="../assets/Rooms__desc Icons/icon 1.svg" alt="" class="">
                             <img src="../assets/Rooms__desc Icons/icon 2.svg" alt="" class="">
@@ -159,7 +172,7 @@ Hotel Miranda | Room Details
                             <h3 class="roomsrelated__room-title">{{ $room['type'] }}</h3>
                             <p class="roomsrelated__content">{{ $room['description'] }}</p>
                             <span class="roomsrelated__price">${{ $room['discountedPrice'] }}/Night</span>
-                            <span onclick="goToRoomDetails()" class="roomsrelated__booknow">Book Now</span>
+                            <a href="../roomdetails/{{ $room->id }}" class="roomsrelated__booknow">Book Now</a>
                         </div>
                     </div>
                 </div>
