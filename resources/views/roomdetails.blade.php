@@ -30,14 +30,13 @@ Hotel Miranda | Room Details
             <img class="roomsdetails__photo" src="{{ $photo->photo_url }}" alt="{{$roomdetails->type}}">
             @endforeach
         </div>
-        <form class="roomsdetails__form" id="roomsdetails__form" method="{{$checkin && $checkout ? 'POST' : 'GET'}}">
+        @if ($checkin && $checkout && !$error)
+        <form class="roomsdetails__form" id="roomsdetails__form" method="POST">
             @csrf
-            <p class="roomsdetails__form--title">Check Availability</p>
             <label for="checkin" class="roomsdetails__form--checkinlabel">Check In</label>
-            <input type="date" id="checkin" name="check_in" value="{{ $checkin }}" class="roomsdetails__form--inputcheckin" readonly>
+            <input type="date" id="checkin" name="check_in" value="{{ $checkin ? $checkin : date('Y-m-d') }}" min="{{date('Y-m-d')}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" class="roomsdetails__form--inputcheckin" {{$checkin && $checkout && !$error ? 'readonly' : '' }}>
             <label for="checkout" class="roomsdetails__form--checkoutlabel">Check Out</label>
-            <input type="date" id="checkout" name="check_out" value="{{ $checkout }}" class="roomsdetails__form--inputcheckout" readonly>
-            @if ($checkin && $checkout)
+            <input type="date" id="checkout" name="check_out" value="{{ $checkout ? $checkout : date('Y-m-d', strtotime('+1 day')) }}" min="{{date('Y-m-d', strtotime('+1 day'))}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" class="roomsdetails__form--inputcheckout" {{$checkin && $checkout && !$error ? 'readonly' : '' }}>
             <label for="firstname" class="roomsdetails__form--namelabel">Name</label>
             <input placeholder="Enter your name" type="text" id="firstname" name="name" class="roomsdetails__form--inputname">
             <label for="surname" class="roomsdetails__form--surnamelabel">Surname</label>
@@ -53,10 +52,20 @@ Hotel Miranda | Room Details
             <input type="hidden" name="order_date" value="{{now()}}">
             <input type="hidden" name="status" value="Check In">
             <button type="submit" class="roomsdetails__form--button">Book Now</button>
-            @else
+        </form>
+        @else
+        <form class="roomsdetails__form" id="roomsdetails__form" method="GET">
+        @if ($error)
+        <p class="disclaimer">Las fechas seleccionadas no están disponibles. Por favor, inténtelo de nuevo.</p>
+        @endif
+            <p class="roomsdetails__form--title">Check Availability</p>
+            <label for="checkin" class="roomsdetails__form--checkinlabel">Check In</label>
+            <input type="date" id="checkin" name="check_in" value="{{ $checkin ? $checkin : date('Y-m-d') }}" min="{{date('Y-m-d')}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" class="roomsdetails__form--inputcheckin" {{$checkin && $checkout && !$error ? 'readonly' : '' }}>
+            <label for="checkout" class="roomsdetails__form--checkoutlabel">Check Out</label>
+            <input type="date" id="checkout" name="check_out" value="{{ $checkout ? $checkout : date('Y-m-d', strtotime('+1 day')) }}" min="{{date('Y-m-d', strtotime('+1 day'))}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" class="roomsdetails__form--inputcheckout" {{$checkin && $checkout && !$error ? 'readonly' : '' }}>
             <button type="submit" class="roomsdetails__form--button">Check Availability</button>
-            @endif
-           
+        </form>
+        @endif
         </form>
     </div>
     <p class="roomsdetails__description">{{ $roomdetails->description }}</p>
@@ -156,7 +165,7 @@ Hotel Miranda | Room Details
             <div class="swiper-slide roomsrelated__cardslide">
                 <div class="roomsrelated__card">
                     <div class="roomsrelated__roomwrapper">
-                    @foreach($room->getPhotos as $photo)
+                        @foreach($room->getPhotos as $photo)
                         <img class="roomsrelated__photo" src="{{ $photo->photo_url }}" alt="Hotel Room">
                         @endforeach
                         <div class="roomsrelated__icons">
