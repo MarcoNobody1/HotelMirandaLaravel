@@ -22,7 +22,7 @@ Hotel Miranda | Rooms
                 <div class="swiper-slide roomshow__swiper-slide">
                     @foreach($chunk as $room)
                     <div class="roomshow__roomwrapper">
-                        <img class="roomshow__photo" src="{{ $photo }}" alt="Hotel Room">
+                        <img class="roomshow__photo" src="{{ $photo[$loop->index] }}" alt="Hotel Room">
                         <div class="roomshow__icons">
                             <img src="/assets/Rooms__desc Icons/icon 1.svg" alt="" class="">
                             <img src="/assets/Rooms__desc Icons/icon 2.svg" alt="" class="">
@@ -36,8 +36,8 @@ Hotel Miranda | Rooms
                             <h3 class="roomshow__title">{{ $room['type'] }}</h3>
                             <p class="roomshow__content">{{ $room['description'] }}</p>
                             <span class="roomshow__price">${{ $room['discountedPrice'] }}/Night</span>
-                            @if($checkin != '' && $checkout != '')
-                            <a href="roomdetails/{{ $room['id'] }}?arrival={{$checkin}}&departure={{$checkout}}" class="roomshow__booknow">Book Now</a>
+                            @if($arrival != '' && $departure != '')
+                            <a href="roomdetails/{{ $room['id'] }}?arrival={{$arrival}}&departure={{$departure}}" class="roomshow__booknow">Book Now</a>
                             @else
                             <a href="roomdetails/{{ $room['id'] }}" class="roomshow__booknow">Book Now</a>
                             @endif
