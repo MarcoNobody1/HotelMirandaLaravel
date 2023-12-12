@@ -8,42 +8,24 @@ use Illuminate\Support\Facades\Session;
 
 class BookingController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        if (Session::has('arrival') && Session::has('departure') && Session::has('roomId') && Session::has('roomPrice')) {
-            $checkin =  htmlspecialchars(Session::get('arrival'));
-            $checkout =  htmlspecialchars(Session::get('departure'));
-            $roomId = htmlspecialchars(Session::get('roomId'));
-            $roomPrice = htmlspecialchars(Session::get('roomPrice'));
-        }
-
 
         $request->validate([
-            'firstname' => 'required',
+            'name' => 'required',
             'surname' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
-            'specialrequest' => 'required',
+            'order_date' => 'required',
+            'check_in' => 'required',
+            'check_out' => 'required',
+            'special_request' => 'required',
+            'room_id' => 'required',
+            'price' => 'required',
+            'status' => 'required',
         ]);
 
-        $currentDateTime = now();
-
-        $booking = Booking::create([
-            'name' => $request->input('firstname'),
-            'surname' => $request->input('surname'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'order_date' =>  $currentDateTime,
-            'check_in' => $checkin,
-            'check_out' => $checkout,
-            'special_request' => $request->input('specialrequest'),
-            'room_id' => $roomId,
-            'price' => $roomPrice,
-            'status' => 'Check In',
-        ]);
+        $booking = Booking::create($request->all());
 
         if ($booking->wasRecentlyCreated) {
             $notification = [
@@ -61,7 +43,6 @@ class BookingController extends Controller
             ];
         }
 
-        Session::forget(['arrival', 'departure']);
 
         return response()->json(['notification' => $notification]);
     }
