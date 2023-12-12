@@ -2330,6 +2330,7 @@ ul {
   font-family: Archivo;
   font-size: 1rem;
   font-weight: 700;
+  text-decoration: none;
 }
 .roomsrelated__booknow:hover {
   cursor: pointer;
@@ -2393,6 +2394,7 @@ ul {
   max-width: 380px;
   --swiper-navigation-top-offset: 30%;
   --swiper-navigation-sides-offset: 10px;
+  --swiper-navigation-color: black;
 }
 .roomsrelated__title {
   color: #222;
