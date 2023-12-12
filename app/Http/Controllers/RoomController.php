@@ -25,13 +25,13 @@ class RoomController extends Controller
 
         $chunks = array_chunk($roomsArray, 5);
 
-        return view('rooms', ['rooms' => $chunks, 'arrival' => $checkin, 'departure' => $checkout, 'photo' => $photoArray]);
+        return view('rooms', ['rooms' => $chunks, 'check_in' => $checkin, 'check_out' => $checkout, 'photo' => $photoArray]);
     }
 
     public function search(Request $request)
     {
-        $checkin = htmlspecialchars($request->query('arrival'));
-        $checkout = htmlspecialchars($request->query('departure'));
+        $checkin = htmlspecialchars($request->query('check_in'));
+        $checkout = htmlspecialchars($request->query('check_out'));
 
         $rooms = Room::getRooms($checkin, $checkout);
 
@@ -45,19 +45,20 @@ class RoomController extends Controller
 
         $chunks = array_chunk($roomsArray, 5);
 
-        return view('rooms', ['rooms' => $chunks, 'arrival' => $checkin, 'departure' => $checkout, 'photo' => $photoArray]);
+        return view('rooms', ['rooms' => $chunks, 'check_in' => $checkin, 'check_out' => $checkout, 'photo' => $photoArray]);
     }
 
     public function show(string $id, Request $request)
     {
-        $checkin = htmlspecialchars($request->query('arrival'));
-        $checkout = htmlspecialchars($request->query('departure'));
+        $checkin = htmlspecialchars($request->query('check_in'));
+        $checkout = htmlspecialchars($request->query('check_out'));
 
         $roomDetails = Room::findOrFail($id);
 
+        $error = false;
+
         $roomId = $roomDetails->id;
         $roomPrice = $roomDetails->price;
-
 
         $roomDetails->finalPrice = $roomDetails->price - ($roomDetails->price * ($roomDetails->discount / 100));
 
@@ -67,12 +68,20 @@ class RoomController extends Controller
             $recommendedRooms = Room::all()->shuffle()->take(5);
         }
 
+        if ($checkin && $checkout) {
+            $roomAvailable = Room::getAvailableRoom($checkin, $checkout, $id);
+            if (count($roomAvailable) == 0) {
+                $error = true;
+            } else {
+                $error = false;
+            }
+        }
 
 
         foreach ($recommendedRooms as &$room) {
             $room['discountedPrice'] = $room['price'] - ($room['price'] * ($room['discount'] / 100));
         }
 
-        return view('roomdetails', ['roomdetails' => $roomDetails, 'recommendedRooms' => $recommendedRooms, 'checkin' => $checkin, 'checkout' => $checkout, 'roomId' => $roomId, 'roomPrice' => $roomPrice]);
+        return view('roomdetails', ['error' =>  $error, 'roomdetails' => $roomDetails, 'recommendedRooms' => $recommendedRooms, 'checkin' => $checkin, 'checkout' => $checkout, 'roomId' => $roomId, 'roomPrice' => $roomPrice]);
     }
 }
