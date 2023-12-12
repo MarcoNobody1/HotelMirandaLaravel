@@ -36,8 +36,8 @@ Hotel Miranda | Rooms
                             <h3 class="roomshow__title">{{ $room['type'] }}</h3>
                             <p class="roomshow__content">{{ $room['description'] }}</p>
                             <span class="roomshow__price">${{ $room['discountedPrice'] }}/Night</span>
-                            @if($arrival != '' && $departure != '')
-                            <a href="roomdetails/{{ $room['id'] }}?arrival={{$arrival}}&departure={{$departure}}" class="roomshow__booknow">Book Now</a>
+                            @if($check_in != '' && $check_out != '')
+                            <a href="roomdetails/{{ $room['id'] }}?check_in={{$check_in}}&check_out={{$check_out}}" class="roomshow__booknow">Book Now</a>
                             @else
                             <a href="roomdetails/{{ $room['id'] }}" class="roomshow__booknow">Book Now</a>
                             @endif
