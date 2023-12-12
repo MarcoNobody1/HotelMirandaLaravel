@@ -17,7 +17,7 @@ Hotel Miranda | Home
         <label for="departure" class="intro__form-departurelbl">Departure Date</label>
         <input name="departure" type="date" value="{{date('Y-m-d', strtotime('+1 day'))}}" min="{{date('Y-m-d', strtotime('+1 day'))}}" max="{{date('Y-m-d', strtotime('+1 Year'))}}" id="departure" class="intro__form-departureinp">
         <br>
-        <button name="availability-btn" type="submit" class="intro__form-btn">CHECK AVAILABILITY</button>
+        <button type="submit" class="intro__form-btn">CHECK AVAILABILITY</button>
 
     </form>
 </section>
