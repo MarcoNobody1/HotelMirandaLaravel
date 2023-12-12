@@ -21,22 +21,28 @@ class Room extends Model
         return $this->hasMany(RoomPhoto::class);
     }
 
+    public static function organizePhotos($rooms)
+    {
+        $photoArray = [];
+        
+        foreach ($rooms as $room) {
+            foreach ($room->getPhotos as $photo) {
+                array_push($photoArray, $photo->photo_url);
+            }
+        }
+
+        return $photoArray;
+    }
+
     public function amenities(): BelongsToMany
     {
         return $this->belongsToMany(Amenity::class, 'room_amenities');
     }
 
-    public function getRooms($checkin, $checkout)
+    public static function getRooms($checkin, $checkout)
     {
 
-
-        $rooms = Room::select('room.*')
-            ->selectRaw('GROUP_CONCAT(DISTINCT photos.photo_url) as photo')
-            ->selectRaw('GROUP_CONCAT(amenity.amenity) as amenity')
-            ->leftJoin('photos', 'room.id', '=', 'photos.room_id')
-            ->leftJoin('room_amenities', 'room.id', '=', 'room_amenities.room_id')
-            ->leftJoin('amenity', 'room_amenities.amenity_id', '=', 'amenity.id')
-            ->where('room.availability', 'Available')
+        $rooms = Room::where('room.availability', 'Available')
             ->whereNotExists(function (Builder $subquery) use ($checkin, $checkout) {
                 $subquery->selectRaw(1)
                     ->from('booking')
