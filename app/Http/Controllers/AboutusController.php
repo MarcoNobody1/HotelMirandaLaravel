@@ -12,7 +12,6 @@ class AboutusController extends Controller
      */
     public function index()
     {
-        Session::forget(['arrival', 'departure']);
         return view('aboutus');
     }
 }
