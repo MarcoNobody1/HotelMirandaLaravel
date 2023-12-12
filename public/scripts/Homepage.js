@@ -151,10 +151,10 @@ const goToAboutUs = () => {
   window.location.href = "aboutus";
 };
 
-const arrivalInput = document.getElementById("arrival");
+const arrivalInput = document.getElementById("check_in");
 
 arrivalInput.addEventListener("change", () => {
-  const departureInput = document.getElementById("departure");
+  const departureInput = document.getElementById("check_out");
 
   const arrivalDate = new Date(arrivalInput.value);
 
