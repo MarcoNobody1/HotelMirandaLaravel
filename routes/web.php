@@ -34,7 +34,7 @@ Route::post('/roomdetails/{id}', [BookingController::class, 'store']);
 
 Route::get('/rooms', [RoomController::class, 'index']);
 
-Route::get('/rooms-search', [RoomController::class, 'store']);
+Route::get('/rooms-search', [RoomController::class, 'search']);
 
 Route::get('/offers', [OfferController::class, 'index']);
 
