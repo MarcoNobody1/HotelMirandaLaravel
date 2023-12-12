@@ -14,7 +14,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        Session::forget(['arrival', 'departure']);
+     
         return view('contact');
     }
 
