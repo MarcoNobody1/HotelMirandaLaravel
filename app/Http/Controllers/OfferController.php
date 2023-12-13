@@ -18,7 +18,7 @@ class OfferController extends Controller
         $checkin = '';
         $checkout = '';
 
-        $rooms = Room::where('room.discount', '!=', "0")->get();
+        $rooms = Room::where('room.discount', '!=', "0")->where('availability', 'Available')->get();
 
         $offerPhotoArray = Room::organizePhotos($rooms);
 
@@ -34,7 +34,7 @@ class OfferController extends Controller
             $recommendedRooms = Room::getRooms($checkin, $checkout)->shuffle()->take(5);
             $recommendedPhotoArray = Room::organizePhotos($recommendedRooms);
         } else {
-            $recommendedRooms = Room::all()->shuffle()->take(5);
+            $recommendedRooms = Room::all()->where('availability', 'Available')->shuffle()->take(5);
             $recommendedPhotoArray = Room::organizePhotos($recommendedRooms);
         }
 
