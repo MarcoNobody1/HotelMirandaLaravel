@@ -84,29 +84,4 @@ class Room extends Model
 
         return $room;
     }
-
-    public function getOffers($checkin, $checkout)
-    {
-
-        $rooms = Room::where('room.availability', 'Available')
-        ->where('room.availability', 'Available')
-            ->where('room.discount', '!=', 0)
-        ->whereNotExists(function (Builder $subquery) use ($checkin, $checkout) {
-            $subquery->selectRaw(1)
-                ->from('booking')
-                ->whereColumn('room.id', 'booking.room_id')
-                ->where(function (Builder $query) use ($checkin, $checkout) {
-                    $query->whereBetween('booking.check_in', [$checkin, $checkout])
-                        ->orWhereBetween('booking.check_out', [$checkin, $checkout])
-                        ->orWhere(function ($q) use ($checkin, $checkout) {
-                            $q->where('booking.check_in', '<', $checkin)
-                                ->where('booking.check_out', '>', $checkout);
-                        });
-                });
-        })
-        ->groupBy('room.id')
-        ->get();
-
-    return $rooms;
-    }
 }
