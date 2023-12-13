@@ -13,7 +13,7 @@ class RoomController extends Controller
         $checkin = '';
         $checkout = '';
 
-        $rooms = Room::all();
+        $rooms = Room::all()->where('availability', 'Available');
 
         $photoArray = Room::organizePhotos($rooms);
 
@@ -63,9 +63,9 @@ class RoomController extends Controller
         $roomDetails->finalPrice = $roomDetails->price - ($roomDetails->price * ($roomDetails->discount / 100));
 
         if ($checkin && $checkout) {
-            $recommendedRooms = Room::getRooms($checkin, $checkout)->shuffle()->take(5);
+            $recommendedRooms = Room::getRooms($checkin, $checkout)->where('availability', 'Available')->shuffle()->take(5);
         } else {
-            $recommendedRooms = Room::all()->shuffle()->take(5);
+            $recommendedRooms = Room::all()->where('availability', 'Available')->shuffle()->take(5);
         }
 
         if ($checkin && $checkout) {
