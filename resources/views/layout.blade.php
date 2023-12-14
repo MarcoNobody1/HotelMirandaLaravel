@@ -34,7 +34,9 @@
             <a href="/contact" class="header__menucontent-contact">Contact</a>
         </nav>
         <div class="header__icons">
-            <img class="header__icons-profile" src="/assets/HeaderProfileIcon.svg" alt="Profile Icon">
+            <a href="/orders">
+                <img class="header__icons-profile" src="/assets/HeaderProfileIcon.svg" alt="Profile Icon">
+            </a>
         </div>
     </header>
     <main>
