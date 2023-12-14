@@ -22,21 +22,23 @@ class OrderController extends Controller
 
     public function create()
     {
-        $numbers = Room::orderBy('number')->pluck('number');
+        $roomsData = Room::orderBy('number')->select('id', 'number')->get();
 
-        $roomsId = Room::pluck('id');
-
-        return view('roomservice', ['numbers' => $numbers, 'rooms' => $roomsId]);
+        return view('roomservice', ['rooms' => $roomsData]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
-    }
 
-    public function show(string $id)
-    {
-        //
+        $data = $request->all();
+
+        $action = Order::create($data);
+
+        if ($action){
+            return Redirect::to('/roomservice')->with('Success', 'Your request is sended');
+        } else {
+            return Redirect::to('/roomservice')->with('Error', 'Something went wrong. Please, try again.');
+        }
     }
 
     public function edit(string $id)
@@ -55,13 +57,17 @@ class OrderController extends Controller
             'description' => 'required|string',
         ]);
 
-        $order->update([
+        $action = $order->update([
             'type' => $request->input('type'),
             'description' => $request->input('description'),
 
         ]);
 
-        return Redirect::to('/orders');
+        if ($action > 0){
+            return Redirect::to('/orders')->with('Success', 'Your order was updated successfully');
+        } else {
+            return Redirect::to('/orders')->with('Error', 'Something went wrong. Please, try again.');
+        }
     }
 
     public function destroy(Request $request): RedirectResponse
@@ -69,8 +75,12 @@ class OrderController extends Controller
 
         $orderId = $request->input("id");
 
-        Order::destroy($orderId);
+        $action = Order::destroy($orderId);
 
-        return Redirect::to('/orders');
+        if ($action > 0){
+            return Redirect::to('/orders')->with('Success', 'Your order was deleted successfully');
+        } else {
+            return Redirect::to('/orders')->with('Error', 'Something went wrong. Please, try again.');
+        }
     }
 }
