@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['type', 'description'];
+    protected $fillable = ['user_id', 'room_id', 'type', 'description'];
     public $timestamps = false;
 
     public function room(): BelongsTo
