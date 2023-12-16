@@ -12,7 +12,7 @@ class Order extends Model
 {
     use HasFactory;
     protected $fillable = ['user_id', 'room_id', 'type', 'description'];
-    public $timestamps = false;
+    
 
     public function room(): BelongsTo
     {
