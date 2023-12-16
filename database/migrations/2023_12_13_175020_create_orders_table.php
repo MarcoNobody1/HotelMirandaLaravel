@@ -13,11 +13,16 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('room_id')->constrained();
+            $table->foreignId('user_id')->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->integer('room_id');
+            $table->foreign('room_id')->references('id')->on('room')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('type');
             $table->string('description');
-            $table->timestamps('timestamps');
+            $table->timestamps();
         });
     }
 
