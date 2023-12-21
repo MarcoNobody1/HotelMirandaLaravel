@@ -6,7 +6,7 @@ Hotel Miranda | Home
 <section class="intro">
     <div class="intro__info">
         <h6 class="intro__info-pretitle">THE ULTIMATE LUXURY EXPERIENCE</h6>
-        <h1 class="intro__info-maintitle">The Perfect Base For You</h1>
+        <h1 class="intro__info-maintitle">La concha de tu hermana</h1>
         <button id="takeatour" onclick="scrollToFirstStop()" class="intro__info-takebtn">TAKE A TOUR</button>
         <button type="button" onclick="goToAboutUs()" class="intro__info-learnbtn">LEARN MORE</button>
     </div>
