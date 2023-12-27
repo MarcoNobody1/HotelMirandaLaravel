@@ -16,7 +16,7 @@
                     <form class="max-w-sm mx-auto" method="POST" action="{{ route('roomservice.create')}}">
                         @csrf
                         @method('POST')
-                        <label for="room_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Room room_id</label>
+                        <label for="room_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Room Number</label>
                         <select name="room_id" id="room_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option selected hidden>Select your room</option>
                             @foreach ($rooms as $room)
