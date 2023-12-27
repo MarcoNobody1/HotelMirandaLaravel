@@ -21,8 +21,4 @@ jobs:
           script: |
             cd /var/www/HotelMirandaLaravel
             sudo git pull
-            sudo chown -R ubuntu:ubuntu /var/www/HotelMirandaLaravel
-            composer install
-            php artisan migrate:refresh
-            sudo chown -R www-data:www-data /var/www/HotelMirandaLaravel
             sudo systemctl restart apache2
